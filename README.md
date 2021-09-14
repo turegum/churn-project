@@ -38,7 +38,7 @@ You can find all the results in the corresponding directories mentioned above.
 
 ## Dependencies
 Here is a list of needed libraries:
-'''
+```python
 joblib==1.0.1
 shap==0.39.0
 pandas==1.1.4
@@ -46,10 +46,10 @@ seaborn==0.11.2
 matplotlib==3.4.3
 numpy==1.20.3
 scikit_learn==0.24.2
-'''
+```
 
 ## Lincense
-[GNU 3.0] (https://www.gnu.org/licenses/gpl-3.0.en.html)
+[GNU 3.0](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 
 
