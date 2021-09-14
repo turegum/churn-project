@@ -7,23 +7,15 @@ date: september 2021
 
 import os
 import logging
-import constants
 import pandas as pd
+import constants as c
 import churn_library as cl
-
-cat_columns = [
-    'Gender',
-    'Education_Level',
-    'Marital_Status',
-    'Income_Category',
-    'Card_Category']
 
 logging.basicConfig(
     filename='./logs/churn_library.log',
     level=logging.INFO,
     filemode='w',
     format='%(name)s - %(levelname)s - %(message)s')
-
 
 def test_import(import_data, pth):
     '''
@@ -34,14 +26,14 @@ def test_import(import_data, pth):
                     pth: a path to the csv
 
     output:
-        df: pandas dataframe
+        data_frame: pandas dataframe
 '''
     try:
-        df = import_data(pth)
-        assert df.shape[0] > 0
-        assert df.shape[1] > 0
+        data_frame = import_data(pth)
+        assert data_frame.shape[0] > 0
+        assert data_frame.shape[1] > 0
         logging.info("Testing import_data: SUCCESS")
-        return df
+        return data_frame
     except FileNotFoundError:
         logging.error("Testing import_eda: The file wasn't found")
     except AssertionError:
@@ -49,20 +41,19 @@ def test_import(import_data, pth):
             "Testing import_data: The file doesn't appear to have rows and columns")
     return pd.DataFrame()
 
-
-def test_eda(perform_eda, df):
+def test_eda(perform_eda, data_frame):
     '''
     test perform eda function
 
 input:
         perform_eda: function to be tested from churn library
-                    df: pandas dataframe
+        data_frame: pandas dataframe
 
 output:
         None
     '''
     try:
-        perform_eda(df)
+        perform_eda(data_frame)
         assert os.path.isfile('./images/eda/churn_distribution.png')
         assert os.path.isfile('./images/eda/customer_age_distribution.png')
         assert os.path.isfile('./images/eda/martial_status_distribution.png')
@@ -80,24 +71,23 @@ output:
         logging.error(
             "Testing perform_eda: One or more EDA images are are not in place")
 
-
-def test_encoder_helper(encoder_helper, df, category_lst):
+def test_encoder_helper(encoder_helper, data_frame, category_lst):
     '''
     test encoder helper
 
 input:
         encoder_helper: function to be tested from churn library
-                    df: pandas dataframe
+        data_frame: pandas dataframe
         category_lst: list of columns that contain categorical features
 
 output:
-        df: pandas dataframe with new columns
+        data_frame: pandas dataframe with new columns
     '''
     try:
-        df = encoder_helper(df, category_lst)
+        data_frame = encoder_helper(data_frame, category_lst)
         assert len(category_lst) > 0
         logging.info("Testing encoder_helper: SUCCESS")
-        return df
+        return data_frame
     except KeyError:
         logging.error(
             "Testing encoder_helper: The dataframe doesn't have proper data or empty")
@@ -108,29 +98,29 @@ output:
         logging.error("Testing encoder_helper: Category list is empty")
     return pd.DataFrame()
 
-
-def test_perform_feature_engineering(perform_feature_engineering, df):
+def test_perform_feature_engineering(perform_feature_engineering, data_frame):
     '''
     test perform_feature_engineering
 
 input:
           perform_feature_engineering: function to be tested from churn library
-                      df: pandas dataframe
+          data_frame: pandas dataframe
 
 output:
-          X_train: X training data
-          X_test: X testing data
-          y_train: y training data
-          y_test: y testing data
+          x_data_train: X training data
+          x_data_test: X testing data
+          y_data_train: y training data
+          y_data_test: y testing data
     '''
     try:
-        X_train, X_test, y_train, y_test = perform_feature_engineering(df)
-        assert len(X_train) > 0
-        assert len(X_test) > 0
-        assert len(y_train) > 0
-        assert len(y_test) > 0
+        x_data_train, x_data_test, y_data_train, y_data_test = perform_feature_engineering(
+            data_frame)
+        assert len(x_data_train) > 0
+        assert len(x_data_test) > 0
+        assert len(y_data_train) > 0
+        assert len(y_data_test) > 0
         logging.info("Testing perform_feature_engineering: SUCCESS")
-        return X_train, X_test, y_train, y_test
+        return x_data_train, x_data_test, y_data_train, y_data_test
     except KeyError:
         logging.error(
             "Testing perform_feature_engineering: The dataframe doesn't have proper data or empty")
@@ -142,25 +132,29 @@ output:
             "Testing perform_feature_engineering: Train and/or test set are empty")
     return 0, 0, 0, 0
 
-
-def test_train_models(train_models, X_train, X_test, y_train, y_test):
+def test_train_models(
+        train_models,
+        x_data_train,
+        x_data_test,
+        y_data_train,
+        y_data_test):
     '''
     test train_models
 
 input:
           train_models: function to be tested from churn library
-                      X_train: X training data
-          X_test: X testing data
-          y_train: y training data
-          y_test: y testing data
+          x_data_train: X training data
+          x_data_test: X testing data
+          y_data_train: y training data
+          y_data_test: y testing data
 output:
           None
     '''
     try:
-        assert len(X_train) > 0
-        assert len(X_test) > 0
-        assert len(y_train) > 0
-        assert len(y_test) > 0
+        assert len(x_data_train) > 0
+        assert len(x_data_test) > 0
+        assert len(y_data_train) > 0
+        assert len(y_data_test) > 0
     except AssertionError:
         logging.error("Testing train_models: Train and/or test set are empty")
         return
@@ -170,7 +164,7 @@ output:
         return
 
     try:
-        train_models(X_train, X_test, y_train, y_test)
+        train_models(x_data_train, x_data_test, y_data_train, y_data_test)
         assert os.path.isfile('./models/rfc_model.pkl')
         assert os.path.isfile('./models/logistic_model.pkl')
         assert os.path.isfile('./images/results/rf_results.png')
@@ -185,7 +179,6 @@ output:
         logging.error(
             "Testing train_models: Some models or result images are missed")
 
-
 if __name__ == "__main__":
     # functions test set
     data_load = test_import(cl.import_data, "./data/bank_data2.csv")  # ERROR
@@ -196,23 +189,23 @@ if __name__ == "__main__":
     data_encoded = test_encoder_helper(
         cl.encoder_helper, data_load, [])  # ERROR
     data_encoded = test_encoder_helper(
-        cl.encoder_helper, 5, cat_columns)  # ERROR
+        cl.encoder_helper, 5, c.CAT_COLUMNS)  # ERROR
     data_encoded = test_encoder_helper(
         cl.encoder_helper,
         pd.DataFrame(),
-        cat_columns)  # ERROR
+        c.CAT_COLUMNS)  # ERROR
     data_encoded = test_encoder_helper(
-        cl.encoder_helper, data_load, cat_columns)  # SUCCESS
-    X_train, X_test, y_train, y_test = test_perform_feature_engineering(
+        cl.encoder_helper, data_load, c.CAT_COLUMNS)  # SUCCESS
+    x_train, x_test, y_train, y_test = test_perform_feature_engineering(
         cl.perform_feature_engineering, 5)  # ERROR
-    X_train, X_test, y_train, y_test = test_perform_feature_engineering(
+    x_train, x_test, y_train, y_test = test_perform_feature_engineering(
         cl.perform_feature_engineering, pd.DataFrame())  # ERROR
-    X_train, X_test, y_train, y_test = test_perform_feature_engineering(
+    x_train, x_test, y_train, y_test = test_perform_feature_engineering(
         cl.perform_feature_engineering, data_encoded)  # SUCCESS
     test_train_models(cl.train_models, 0, 5, 'string', y_test)  # ERROR
     test_train_models(
         cl.train_models,
-        X_train,
-        X_test,
+        x_train,
+        x_test,
         y_train,
         y_test)  # SUCCESS

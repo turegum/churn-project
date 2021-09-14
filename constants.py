@@ -6,12 +6,12 @@ date: september 2021
 '''
 
 # Learining parameters
-test_size = 0.3
-random_state = 42
-max_iter = 500
-cv = 5
+TEST_SIZE = 0.3
+RANDOM_STATE = 42
+MAX_INTER = 500
+CV = 5
 
-param_grid = {
+PARAM_GRID = {
     'n_estimators': [200, 500],
     'max_features': ['auto', 'sqrt'],
     'max_depth': [4, 5, 100],
@@ -19,9 +19,9 @@ param_grid = {
 }
 
 # Data column names
-response = 'Churn'
+RESPONSE = 'Churn'
 
-cat_columns = [
+CAT_COLUMNS = [
     'Gender',
     'Education_Level',
     'Marital_Status',
@@ -29,7 +29,7 @@ cat_columns = [
     'Card_Category'
 ]
 
-quant_columns = [
+QUANT_COLUMNS = [
     'Customer_Age',
     'Dependent_count',
     'Months_on_book',
@@ -47,4 +47,4 @@ quant_columns = [
 ]
 
 # Plot parameters
-alpha = 0.8
+ALPHA = 0.8
