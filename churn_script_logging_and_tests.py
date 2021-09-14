@@ -5,11 +5,13 @@ author: Oleg
 date: september 2021
 '''
 
+#pylint: disable=wrong-import-positio
 import os
 import logging
 import pandas as pd
 import constants as c
 import churn_library as cl
+#pylint: enable=wrong-import-position
 
 logging.basicConfig(
     filename='./logs/churn_library.log',

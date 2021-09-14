@@ -5,6 +5,7 @@ author: Oleg
 date: september 2021
 '''
 
+#pylint: disable=wrong-import-position
 from sklearn.metrics import plot_roc_curve, classification_report
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
@@ -18,6 +19,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import constants as c
 sns.set()
+#pylint: enable=wrong-import-position
 
 
 def import_data(pth):
